@@ -45,4 +45,11 @@ func (h *httpClient) GetBoxScore(gameID string) (*GameBoxScore, error) {
 		return nil, err
 	}
 
+	if res.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("") //TODO: fix
+	}
+
+	//TODO: write the rest
+
+	return nil, fmt.Errorf("not implemented")
 }
