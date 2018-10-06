@@ -50,4 +50,15 @@ type GameResult struct {
 }
 
 type Player struct {
+	ID                uint32
+	FirstName         string
+	LastName          string
+	NickName          *string
+	CurrentTeamID     *uint32
+	PositionPrimary   string
+	PositionSecondary *string
+	Active            bool
+	FanDuelID         *string
+	YahooDailyID      *string
+	MSFID             int
 }
