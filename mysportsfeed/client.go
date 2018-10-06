@@ -13,6 +13,7 @@ type Client interface {
 	GetBoxScore(season, gameID string) (*GameBoxScore, error)
 	CumulativePlayersStats(season string) (*CumulativePlayerStats, error)
 	GetSchedule(season string) (*FullGameSchedule, error)
+	GetRosterPlayers(season, date string) (*RosterPlayers, error)
 }
 
 type Config struct {
@@ -130,4 +131,36 @@ func (h *httpClient) GetSchedule(season string) (*FullGameSchedule, error) {
 	}
 
 	return &fgsw.FullGameSchedule, nil
+}
+
+func (h *httpClient) GetRosterPlayers(season, date string) (*RosterPlayers, error) {
+	url := fmt.Sprintf("%s/%s/pull/%s/%s/roster_players.json?fordate=%s", h.Conf.BaseURL, h.Conf.Version, h.Conf.Sport, season, date)
+
+	// Create Request
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	// Attach auth header
+	req.Header.Set("Authorization", "Basic "+base64.StdEncoding.EncodeToString([]byte(h.Conf.APIToken+":"+h.Conf.Password)))
+
+	// Send Request
+	res, err := h.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	if res.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("error code: " + res.Status) //TODO: fix
+	}
+
+	//TODO: write the rest
+
+	var rpw RosterPlayersWrapper
+	if e := json.NewDecoder(res.Body).Decode(&rpw); e != nil {
+		return nil, e
+	}
+
+	return &rpw.RosterPlayers, nil
 }

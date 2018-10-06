@@ -324,6 +324,7 @@ type Stat struct {
 type PlayerEntry struct {
 	Player Player      `json:"player"`
 	Stats  PlayerStats `json:"stats"`
+	Team   *Team       `json:"team"`
 }
 
 func (p PlayerEntry) String() string {
@@ -355,4 +356,13 @@ type CumulativePlayerStats struct {
 type PlayerStatsEntry struct {
 	PlayerEntry
 	Team Team
+}
+
+type RosterPlayersWrapper struct {
+	RosterPlayers RosterPlayers `json:"rosterplayers"`
+}
+
+type RosterPlayers struct {
+	LastUpdatedOn string        `json:"lastUpdatedOn"`
+	PlayerEntries []PlayerEntry `json:"playerentry"`
 }
